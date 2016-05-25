@@ -11,21 +11,14 @@ m = length(y); % number of training examples
 % You need to return the following variables correctly 
 J = 0;
 grad = zeros(size(theta));
-
+v = size(theta);
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta.
 %               You should set J to the cost.
 %               Compute the partial derivatives and set grad to the partial
 %               derivatives of the cost w.r.t. each parameter in theta
 %
-% Hint: The computation of the cost function and gradients can be
-%       efficiently vectorized. For example, consider the computation
-%
-%           sigmoid(X * theta)
-%
-%       Each row of the resulting matrix will contain the value of the
-%       prediction for that example. You can make use of this to vectorize
-%       the cost function and gradient computations. 
+J  = (- transpose(log(sigmoid(X * theta)))* y  -  (transpose(log( 1 - sigmoid(X * theta)))*(1 - y) )) ./m + lambda*transpose(theta(2:v))*theta(2:v)./(2*m);
 %
 % Hint: When computing the gradient of the regularized cost function, 
 %       there're many possible vectorized solutions, but one solution
@@ -35,10 +28,10 @@ grad = zeros(size(theta));
 %           temp(1) = 0;   % because we don't add anything for j = 0  
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
-
-
-
-
+temp = 0;
+temp = (transpose(sigmoid(X * theta) - y) * X) ./m
+grad = temp + lambda .* transpose(theta) ./m;
+grad(1) = temp(1);
 
 
 
