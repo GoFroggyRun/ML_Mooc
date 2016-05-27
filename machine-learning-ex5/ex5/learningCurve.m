@@ -20,6 +20,13 @@ m = size(X, 1);
 % You need to return these values correctly
 error_train = zeros(m, 1);
 error_val   = zeros(m, 1);
+for  i = 1:m
+    Xtr = X(1:i,:);
+    ytr = y(1:i);
+    theta = trainLinearReg(Xtr, ytr, lambda);
+    error_train(i) = (1/(2*i)) * transpose(Xtr * theta - ytr) * (Xtr * theta - ytr);
+    error_val(i) = (1/(2*m)) * transpose(Xval * theta - yval) * (Xval * theta - yval);
+end
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Fill in this function to return training errors in 
