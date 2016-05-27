@@ -38,7 +38,21 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
-%
+Y = zeros(m, num_labels);
+for j = 1:m
+   colnum = y(j,1);
+   Y(j,colnum) = 1;
+end
+
+input = [ones(m, 1) X];
+Z2 = input * Theta1';
+layer1 = sigmoid(input * Theta1');
+n = size(layer1, 1);
+layer1 = [ones(n, 1) layer1];
+output = sigmoid(layer1 * Theta2');
+regpenalty = (lambda/(2*m))*( sum(sum(Theta1(:,2:end).^2,2)) + sum(sum(Theta2(:,2:end).^2,2)));
+J = (1/m)*sum(sum((-Y) .* log(output) - (1-Y) .* log(1-output),2));
+J = J + regpenalty;
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
@@ -62,22 +76,18 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+sigma3 = output - Y;
 
+sigma2 = sigma3 * Theta2 .* sigmoidGradient( [ones(n, 1) Z2]); 
+sigma2 = sigma2(:,2:end);
 
+Delta2 = sigma3' * layer1;
+Delta1 = sigma2' * input;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Theta1_grad = Delta1 ./ m + (lambda./m)*Theta1;
+Theta1_grad(:,1) =  Delta1(:,1) ./ m ;
+Theta2_grad = Delta2 ./ m + (lambda./m)*Theta2;
+Theta2_grad(:,1) =  Delta2(:,1) ./ m ;
 
 
 % -------------------------------------------------------------
