@@ -20,9 +20,13 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
-
-
+len = size(X,1);
+span = ones(K,1);
+for i = 1:len
+    Spaned = kron(X(i,:),span);
+    dist = sum((Spaned - centroids).^2,2);
+    [value, idx(i)] = min(dist);
+end
 
 
 
